@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attrition Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <ul class="navbar-menu">
+                    <li><a href="{{ url_for('index') }}">UPLOAD FILE </a></li>
+                    <li><a href="{{ url_for('index') }}">VIEW DATA</a></li>
+                    <li><a href="{{ url_for('graphs') }}">GRAPH ANALYSIS</a></li>
+                    
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" >
+        <h1>Upload Employee Attrition CSV File</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <input type="submit" value="Upload">
+        </form>
+        
+
+        {% if column_names %}
+            <h2>Uploaded Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        {% for col in column_names %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in row_data %}
+                        <tr>
+                            {% for item in row %}
+                                <td>{{ item }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>

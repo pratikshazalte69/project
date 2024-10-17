@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphs</title>
+    <style>
+        /* General styling for page layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Styling for graph images */
+        .graph-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .graph-item {
+            width: 45%;
+            margin: 15px;
+            position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .graph-item:hover {
+            transform: scale(1.05); /* Zoom effect on hover */
+        }
+
+        .graph-item img {
+            width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Full screen zoom effect */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content:hover {
+            transform: scale(1.05);
+        }
+
+        /* Caption text */
+        .modal-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover, .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Responsiveness */
+        @media only screen and (max-width: 700px) {
+            .modal-content {
+                width: 100%;
+            }
+
+            .graph-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Model Accuracy: {{ accuracy }}</h2>
+
+<div class="container">
+    <h1>Generated Graphs</h1>
+
+    <div class="graph-container">
+        <!-- Attrition Count Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_count.png') }}" alt="Attrition Count" onclick="openModal(this)">
+        </div>
+
+        <!-- Attrition by Department Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_department.png') }}" alt="Attrition by Department" onclick="openModal(this)">
+        </div>
+
+        <!-- Attrition by Education Field Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_education_field.png') }}" alt="Attrition by Education Field" onclick="openModal(this)">
+        </div>
+
+        <!-- Job Role w.r.t Attrition Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_job_role.png') }}" alt="Job Role w.r.t Attrition" onclick="openModal(this)">
+        </div>
+
+        <!-- Gender w.r.t Attrition Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_gender.png') }}" alt="Gender w.r.t Attrition" onclick="openModal(this)">
+        </div>
+
+        <!-- Age Distribution Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='age_distribution.png') }}" alt="Age Distribution" onclick="openModal(this)">
+        </div>
+
+        <!-- Education w.r.t Attrition Graph -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='attrition_education.png') }}" alt="Education w.r.t Attrition" onclick="openModal(this)">
+        </div>
+
+        <!-- Confusion Matrix and ROC Curve -->
+        <div class="graph-item">
+            <img src="{{ url_for('static', filename='confusion_matrix_roc.png') }}" alt="Confusion Matrix and ROC Curve" onclick="openModal(this)">
+        </div>
+    </div>
+</div>
+
+<!-- The Modal for Image Zoom -->
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="imgModal">
+    <div id="caption" class="modal-caption"></div>
+</div>
+
+<script>
+    // Open the Modal
+    function openModal(imgElement) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("imgModal");
+        var captionText = document.getElementById("caption");
+
+        modal.style.display = "block";
+        modalImg.src = imgElement.src;
+        captionText.innerHTML = imgElement.alt;
+    }
+
+    // Close the Modal
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

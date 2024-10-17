@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <script>
+        // Function to add Sr. No. column dynamically and Action buttons
+        function addSerialNumbers() {
+            const table = document.querySelector('table tbody');
+            const rows = table.querySelectorAll('tr');
+
+            rows.forEach((row, index) => {
+                // Create and add Sr. No. cell
+                const serialCell = document.createElement('td');
+                serialCell.textContent = index + 1;
+                row.insertBefore(serialCell, row.firstChild);
+
+                // Create and add Action cell with Edit and Delete buttons
+                const actionCell = document.createElement('td');
+                const editButton = document.createElement('button');
+                const deleteButton = document.createElement('button');
+
+                editButton.textContent = 'Edit';
+                deleteButton.textContent = 'Delete';
+
+                // Add event listeners for Edit and Delete buttons
+                editButton.addEventListener('click', function () {
+                    editRow(row);
+                });
+
+                deleteButton.addEventListener('click', function () {
+                    deleteRow(row);
+                });
+
+                // Append buttons to action cell
+                actionCell.appendChild(editButton);
+                actionCell.appendChild(deleteButton);
+
+                // Append the action cell to the row
+                row.appendChild(actionCell);
+            });
+        }
+
+        // Function to edit a row
+        function editRow(row) {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (index > 0 && index < cells.length - 1) { // Exclude Sr. No. and Action columns
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = cell.textContent;
+                    cell.textContent = '';
+                    cell.appendChild(input);
+                }
+            });
+
+            // Replace Edit button with Save button
+            const actionCell = row.lastChild;
+            const editButton = actionCell.querySelector('button:first-child');
+            editButton.textContent = 'Save';
+            editButton.removeEventListener('click', () => editRow(row));
+            editButton.addEventListener('click', () => saveRow(row));
+        }
+
+        // Function to save edited row
+        function saveRow(row) {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (index > 0 && index < cells.length - 1) { // Exclude Sr. No. and Action columns
+                    const input = cell.querySelector('input');
+                    if (input) {
+                        cell.textContent = input.value;
+                    }
+                }
+            });
+
+            // Replace Save button with Edit button
+            const actionCell = row.lastChild;
+            const saveButton = actionCell.querySelector('button:first-child');
+            saveButton.textContent = 'Edit';
+            saveButton.removeEventListener('click', () => saveRow(row));
+            saveButton.addEventListener('click', () => editRow(row));
+        }
+
+        // Function to delete a row
+        function deleteRow(row) {
+            row.remove();
+            // Optionally, re-number the remaining rows
+            addSerialNumbers();
+        }
+
+        // Call the function once the document is fully loaded
+        document.addEventListener("DOMContentLoaded", addSerialNumbers);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a href="graphs.html">View Graphs</a>
+        <h1>Uploaded Employee Attrition Data</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr. No.</th> <!-- Placeholder for Sr. No. column -->
+                    {% for col in column_names %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                    <th>Action</th> <!-- New Action column -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in row_data %}
+                <tr>
+                    {% for item in row %}
+                    <td>{{ item }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/" class="upload-link">Upload Another File</a>
+    </div>
+</body>
+</html>
